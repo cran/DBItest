@@ -23,6 +23,7 @@ Test full compliance to DBI
 }
 \seealso{
 Other tests: 
+\code{\link{test_arrow}()},
 \code{\link{test_connection}()},
 \code{\link{test_driver}()},
 \code{\link{test_getting_started}()},

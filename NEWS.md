@@ -1,4 +1,69 @@
-<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+
+# DBItest 1.8.0 (2023-12-21)
+
+## Bug fixes
+
+- Fix `create_roundtrip_keywords` and `create_roundtrip_quotes` tests (#283).
+
+## Features
+
+- Relax specification of `dbUnquoteIdentifier()`, character vectors are now allowed too.
+
+- Specify `dbFetchChunk()` (#331), `dbFetchArrowChunk()` (#301) and `dbBindArrow()` (#328).
+
+- Inline all tests for `dbBind()` (#326).
+
+- Require support for `dbFetch(n = NA)` (#296, #316).
+
+- New `allow_na_rows_affected` tweak to support `NA` values returned from `dbGetRowsAffected()` (#297, #312).
+
+- Switch to nanoarrow (#291).
+
+- Basic tests for the new `db*Arrow()` interface (#287).
+
+- New `skip_if_not_dbitest()` (#289).
+
+- `reexport` test uses interface for dev DBI if the backend is compatible with DBItest \> 1.7.3.
+
+- Slightly better code generated for `tweaks()` (#313).
+
+- Remove interface to dblog in the CRAN version.
+
+## CI/CD
+
+- Add adbi to check matrix (#314).
+
+- Reenable ODBC MySQL tests (#288).
+
+- Tweak `read_table_missing` test (#285).
+
+## Chore
+
+- Remove rlang qualification (#332).
+
+- No longer need `as.data.frame()` twice for Arrow (#302, #330).
+
+- Consistent use of `skip_if_not_dbitest()` (#317).
+
+- Disable Arrow skips (#303).
+
+- Modernize `sql_union()` (#304).
+
+- Make better use of `trivial_df()` (#284).
+
+## Documentation
+
+- Avoid error if RSQLite is not installed.
+
+## Testing
+
+- Run DBItest for SQLite as part of the checks here (#318).
+
+- Enable remaining Arrow tests (#307).
+
+- Fix checks without suggested packages (#300).
+
 
 # DBItest 1.7.3 (2022-10-18)
 

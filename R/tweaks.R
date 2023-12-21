@@ -101,6 +101,10 @@
     #'   Set to `FALSE` if the DBMS doesn't support listing temporary tables.
     "list_temporary_tables" = TRUE,
 
+    #' @param allow_na_rows_affected `[logical(1L)]`\cr
+    #'   Set to `TRUE` to allow [dbGetRowsAffected()] to return `NA`.
+    "allow_na_rows_affected" = FALSE,
+
     #' @param is_null_check `[function(character)]`\cr
     #'   A vectorized function that creates an SQL expression for checking if a
     #'   value is `NULL`.
@@ -126,7 +130,7 @@ make_tweaks <- function(envir = parent.frame()) {
 
   tweak_quoted <- lapply(setNames(nm = names(fmls)), as.name)
   tweak_quoted <- c(tweak_quoted)
-  list_call <- as.call(c(quote(list), tweak_quoted))
+  list_call <- as.call(c(quote(list), tweak_quoted[-1]))
 
   fun <- eval(bquote(
     function() {

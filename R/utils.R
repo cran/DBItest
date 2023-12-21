@@ -27,7 +27,7 @@ local_invalid_connection <- function(ctx, ...) {
 }
 
 # Calls `dbClearResult()` on `query` after exiting `frame`.
-local_result <- function(query, frame = rlang::caller_env()) {
+local_result <- function(query, frame = caller_env()) {
   res <- query
   withr::defer(
     {
@@ -39,7 +39,7 @@ local_result <- function(query, frame = rlang::caller_env()) {
 }
 
 # Calls `try_silent(dbRemoveTable())` after exiting `frame`.
-local_remove_test_table <- function(con, name, frame = rlang::caller_env()) {
+local_remove_test_table <- function(con, name, frame = caller_env()) {
   table_name <- dbQuoteIdentifier(con, name)
   withr::defer(
     try_silent(
@@ -51,9 +51,10 @@ local_remove_test_table <- function(con, name, frame = rlang::caller_env()) {
 
 get_penguins <- function(ctx) {
   datasets_penguins <- unrowname(palmerpenguins::penguins[c(1, 153, 277), ])
-  if (!isTRUE(ctx$tweaks$strict_identifier)) {
-    names(datasets_penguins) <- gsub("_", ".", names(datasets_penguins), fixed = TRUE)
-  }
+  # FIXME: better handling of DBI backends that do support factors
+  datasets_penguins$species <- as.character(datasets_penguins$species)
+  datasets_penguins$island <- as.character(datasets_penguins$island)
+  datasets_penguins$sex <- as.character(datasets_penguins$sex)
   as.data.frame(datasets_penguins)
 }
 
@@ -71,10 +72,6 @@ compact <- function(x) {
   x[!vapply(x, is.null, logical(1L))]
 }
 
-expand_char <- function(...) {
-  df <- expand.grid(..., stringsAsFactors = FALSE)
-  do.call(paste0, df)
-}
 
 try_silent <- function(code) {
   tryCatch(
@@ -96,4 +93,8 @@ check_df <- function(df) {
   expect_false(anyNA(df_names))
 
   df
+}
+
+check_arrow <- function(stream) {
+  check_df(as.data.frame(stream))
 }

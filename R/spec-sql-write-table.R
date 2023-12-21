@@ -130,9 +130,7 @@ spec_sql_write_table <- list(
 
   write_table_name_quoted = function(ctx, con) {
     #' - If the result of a call to [dbQuoteIdentifier()]: no more quoting is done
-    if (as.package_version(ctx$tweaks$dbitest_version) < "1.7.2") {
-      skip(paste0("tweak: dbitest_version: ", ctx$tweaks$dbitest_version))
-    }
+    skip_if_not_dbitest(ctx, "1.7.2")
 
     if (isTRUE(ctx$tweaks$strict_identifier)) {
       table_names <- "a"
@@ -345,9 +343,7 @@ spec_sql_write_table <- list(
 
   roundtrip_quotes_column_names = function(ctx, con) {
     #' and column names.
-    if (as.package_version(ctx$tweaks$dbitest_version) < "1.7.2") {
-      skip(paste0("tweak: dbitest_version: ", ctx$tweaks$dbitest_version))
-    }
+    skip_if_not_dbitest(ctx, "1.7.2")
 
     if (isTRUE(ctx$tweaks$strict_identifier)) {
       skip("tweak: strict_identifier")
@@ -828,8 +824,15 @@ test_table_roundtrip <- function(...) {
   test_table_roundtrip_one(..., .add_na = "below")
 }
 
-test_table_roundtrip_one <- function(con, tbl_in, tbl_expected = tbl_in, transform = identity,
-                                     name = NULL, field.types = NULL, use_append = FALSE, .add_na = "none") {
+test_table_roundtrip_one <- function(
+    con,
+    tbl_in,
+    tbl_expected = tbl_in,
+    transform = identity,
+    name = NULL,
+    field.types = NULL,
+    use_append = FALSE,
+    .add_na = "none") {
   force(tbl_expected)
   if (.add_na == "above") {
     tbl_in <- add_na_above(tbl_in)

@@ -1,5 +1,5 @@
 expect_arglist_is_empty <- function(object) {
-  act <- quasi_label(rlang::enquo(object), arg = "object")
+  act <- quasi_label(enquo(object), arg = "object")
   act$formals <- formals(act$val)
   expect(
     is.null(act$formals),
@@ -10,7 +10,7 @@ expect_arglist_is_empty <- function(object) {
 }
 
 expect_all_args_have_default_values <- function(object) {
-  act <- quasi_label(rlang::enquo(object), arg = "object")
+  act <- quasi_label(enquo(object), arg = "object")
   act$args <- formals(act$val)
   act$args <- act$args[names(act$args) != "..."]
   act$char_args <- vapply(act$args, as.character, character(1L))
@@ -78,4 +78,14 @@ expect_equal_df <- function(actual, expected) {
   expected <- unrowname(expected[order_expected, ])
 
   expect_identical(actual, expected)
+}
+
+expect_equal_arrow <- function(actual, expected) {
+  expect_equal_df(as.data.frame(actual), as.data.frame(expected))
+}
+
+skip_if_not_dbitest <- function(ctx, version) {
+  if (as.package_version(ctx$tweaks$dbitest_version) < version) {
+    skip(paste0("tweak: dbitest_version: required: ", version, ", available: ", ctx$tweaks$dbitest_version))
+  }
 }

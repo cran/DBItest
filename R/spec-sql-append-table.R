@@ -26,9 +26,7 @@ spec_sql_append_table <- list(
   append_table_missing = function(con, table_name) {
     #' @section Failure modes:
     #' If the table does not exist,
-    expect_false(dbExistsTable(con, table_name))
-
-    test_in <- trivial_df()
+    stopifnot(!dbExistsTable(con, table_name))
     expect_error(dbAppendTable(con, table_name, data.frame(a = 2L)))
   },
 
@@ -509,9 +507,7 @@ spec_sql_append_table <- list(
 
   append_table_name_quoted = function(ctx, con) {
     #' - If the result of a call to [dbQuoteIdentifier()]: no more quoting is done
-    if (as.package_version(ctx$tweaks$dbitest_version) < "1.7.2") {
-      skip(paste0("tweak: dbitest_version: ", ctx$tweaks$dbitest_version))
-    }
+    skip_if_not_dbitest(ctx, "1.7.2")
 
     #' to support databases that allow non-syntactic names for their objects:
     if (isTRUE(ctx$tweaks$strict_identifier)) {

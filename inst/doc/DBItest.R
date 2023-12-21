@@ -1,7 +1,7 @@
 ## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(error = (getRversion() < "3.5"))
 
-## ----make-context-------------------------------------------------------------
+## ----make-context, error = !rlang::is_installed("RSQLite")--------------------
 library(DBItest)
 
 tweaks <- tweaks(
@@ -28,10 +28,10 @@ invisible(make_context(
   default_skip = default_skip
 ))
 
-## ----simple, error = (getRversion() < "3.5") || !rlang::is_installed("dblog")----
+## ----simple, error = !rlang::is_installed("RSQLite")--------------------------
 DBItest::test_some("get_query_atomic")
 
-## ----location, error = (getRversion() < "3.5") || !rlang::is_installed("dblog")----
+## ----location, error = !rlang::is_installed("RSQLite")------------------------
 testthat::with_reporter(
   c("location", "fail"),
   DBItest::test_some("get_query_atomic")

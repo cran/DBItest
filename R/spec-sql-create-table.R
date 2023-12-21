@@ -101,9 +101,7 @@ spec_sql_create_table <- list(
 
   create_table_name_quoted = function(ctx, con) {
     #' - If the result of a call to [dbQuoteIdentifier()]: no more quoting is done
-    if (as.package_version(ctx$tweaks$dbitest_version) < "1.7.2") {
-      skip(paste0("tweak: dbitest_version: ", ctx$tweaks$dbitest_version))
-    }
+    skip_if_not_dbitest(ctx, "1.7.2")
 
     if (isTRUE(ctx$tweaks$strict_identifier)) {
       table_names <- "a"
@@ -180,7 +178,7 @@ spec_sql_create_table <- list(
       select = "unique", from = "join", where = "order",
       stringsAsFactors = FALSE
     )
-    test_table_roundtrip(con, tbl_in, name = "exists")
+    test_table_roundtrip(con, tbl_in, name = "exists", use_append = TRUE)
   },
 
   create_roundtrip_quotes = function(ctx, con) {
@@ -198,16 +196,9 @@ spec_sql_create_table <- list(
     )
 
     for (table_name in table_names) {
-      tbl_in <- trivial_df(4, letters[1:4])
+      tbl_in <- trivial_df(4, table_names)
 
-      names(tbl_in) <- c(
-        as.character(dbQuoteIdentifier(con, "")),
-        as.character(dbQuoteString(con, "")),
-        "with space",
-        ","
-      )
-
-      test_table_roundtrip(con, tbl_in)
+      test_table_roundtrip(con, tbl_in, use_append = TRUE)
     }
   },
 
