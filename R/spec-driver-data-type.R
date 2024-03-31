@@ -87,7 +87,7 @@ test_data_type <- function(ctx, dbObj) {
     }
   )
 
-  lapply(
+  map(
     compact(expected_data_types),
     expect_has_data_type
   )
@@ -96,7 +96,7 @@ test_data_type <- function(ctx, dbObj) {
 
   #' As-is objects (i.e., wrapped by [I()]) must be
   #' supported and return the same results as their unwrapped counterparts.
-  lapply(
+  map(
     compact(expected_data_types),
     function(value) {
       if (!is.null(value)) {
@@ -113,12 +113,12 @@ test_data_type <- function(ctx, dbObj) {
     }
   )
 
-  #' The SQL data type for [factor]
+  #' The SQL data type for [factor] and
   expect_identical(
     dbDataType(dbObj, letters),
     dbDataType(dbObj, factor(letters))
   )
-  #' and [ordered] is the same as for character.
+  #' [ordered] is the same as for character.
   expect_identical(
     dbDataType(dbObj, letters),
     dbDataType(dbObj, ordered(letters))

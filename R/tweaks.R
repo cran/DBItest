@@ -128,7 +128,7 @@
 make_tweaks <- function(envir = parent.frame()) {
   fmls <- tweak_names[-length(tweak_names)]
 
-  tweak_quoted <- lapply(setNames(nm = names(fmls)), as.name)
+  tweak_quoted <- map(setNames(nm = names(fmls)), as.name)
   tweak_quoted <- c(tweak_quoted)
   list_call <- as.call(c(quote(list), tweak_quoted[-1]))
 
@@ -145,7 +145,7 @@ make_tweaks <- function(envir = parent.frame()) {
         }
       }
       ret <- .(list_call)
-      ret <- ret[!vapply(ret, is.null, logical(1L))]
+      ret <- compact(ret)
       structure(ret, class = "DBItest_tweaks")
     },
     as.environment(list(list_call = list_call))
